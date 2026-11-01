@@ -1,13 +1,11 @@
 name: Compilar Novela Visual RenPy a iOS
 on: workflow_dispatch:
-jobs:build-ios:runs-on: macos-latest
-steps:
-  - name: Descargar repositorio
-    uses: actions/checkout@v4
+jobs: build-ios: runs-on: macos-latest steps: - name: Descargar repositorio uses: actions/checkout@v4
 
   - name: Descargar y Preparar Juego
     run: |
-      curl -L -o juego.zip "https://mediafire.com"
+      # Reemplaza la URL por un enlace de descarga directa real (no la web de MediaFire)
+      curl -L -o juego.zip "https://www.mediafire.com/file/wljoge8mmazmt4p/my_femboy_roomate.zip/file"
       unzip juego.zip
       TARGET_DIR=$(find . -type d -name "game" -o -name "x-game" | head -n 1)
       if [ -z "$TARGET_DIR" ]; then
@@ -23,7 +21,7 @@ steps:
       version: "8.2.0"
 
   - name: Compilar IPA de iOS
-    uses: PaxlavaGames/renpy-build@0.3.0
+    uses: PaxlavaGames/renpy-build@v0.3.0
     with:
       path: "./"
 
