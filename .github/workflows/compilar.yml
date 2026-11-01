@@ -1,24 +1,29 @@
 name: Compilar Novela Visual RenPy a iOS
+on: workflow_dispatch:
+jobs: build-ios: runs-on: macos-latest
+steps:
+  - name: Descargar repositorio
+    uses: actions/checkout@v4
 
-on:
-  workflow_dispatch: # Esto activa un botón manual para iniciar la compilación
+  - name: Descargar y Descomprimir juego pesado
+    run: |
+      curl -L -o juego.zip "https://mediafire.com"
+      unzip juego.zip
+      mv my_femboy_roomate game || true
+      mv x-game game || true
 
-jobs:
-  build-ios:
-    runs-on: macos-latest # GitHub te prestará una Mac virtual para compilarlo
+  - name: Instalar Entorno RenPy
+    uses: PaxlavaGames/renpy-install@v0.3.0
+    with:
+      version: "8.2.0"
 
-    steps:
-      - name: Descargar repositorio
-        uses: actions/checkout@v4
+  - name: Compilar IPA de iOS
+    uses: PaxlavaGames/renpy-build@0.3.0
+    with:
+      path: "./"
 
-      - name: Instalar y Compilar con RenPy
-        uses: PaxlavaGames/renpy-build@0.3.0
-        with:
-          path: "./"
-          version: "8.2.0" # Cambia esto a "7.7.0" si tu juego es antiguo
-
-      - name: Guardar archivo IPA de iOS
-        uses: actions/upload-artifact@v4
-        with:
-          name: my_femboy_roomate_iOS
-          path: ./build/*.ipa
+  - name: Guardar archivo IPA de iOS
+    uses: actions/upload-artifact@v4
+    with:
+      name: my_femboy_roommate_iOS
+      path: ./build/*.ipa
