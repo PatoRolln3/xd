@@ -1,16 +1,21 @@
 name: Compilar Novela Visual RenPy a iOS
-on: workflow_dispatch:
-jobs: build-ios: runs-on: macos-latest
+on:workflow_dispatch:
+jobs:build-ios:runs-on: macos-latest
 steps:
   - name: Descargar repositorio
     uses: actions/checkout@v4
 
-  - name: Descargar y Descomprimir juego pesado
+  - name: Descargar y Preparar Juego
     run: |
       curl -L -o juego.zip "https://mediafire.com"
       unzip juego.zip
-      mv my_femboy_roomate game || true
-      mv x-game game || true
+      TARGET_DIR=$(find . -type d -name "game" -o -name "x-game" | head -n 1)
+      if [ -z "$TARGET_DIR" ]; then
+        TARGET_DIR=$(dirname $(find . -name "options.rpy" | head -n 1))
+      fi
+      if [ -d "$TARGET_DIR" ] && [ "$TARGET_DIR" != "./game" ]; then
+        mv "$TARGET_DIR" ./game
+      fi
 
   - name: Instalar Entorno RenPy
     uses: PaxlavaGames/renpy-install@v0.3.0
