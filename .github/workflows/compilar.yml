@@ -1,5 +1,5 @@
 name: Compilar Novela Visual RenPy a iOS
-on:workflow_dispatch:
+on: workflow_dispatch:
 jobs:build-ios:runs-on: macos-latest
 steps:
   - name: Descargar repositorio
